@@ -16,7 +16,7 @@
 
 **My pipeline consisted of 5 steps.**
 
-####a) Filter out all the colours except for white and yellow. 
+#### a) Filter out all the colours except for white and yellow. 
 RGB was used to filter out the white but for yellow HSV worked a lot better.
  
 ```python
@@ -62,7 +62,7 @@ def filter_colour_hsv(image, lower, upper):
 ```
 This is what the image looks like after the filter:
 ![image1]
-####b) Remove undesired regions of the image.
+#### b) Remove undesired regions of the image.
 In order to improve performance, ```region_of_interest()``` was applied before canny edge detection.
 
 ```python
@@ -104,7 +104,7 @@ def region_of_interest(img, vertices):
   return masked_image
 ```
 
-####c) Apply gaussian blur to improve the quality of canny function.
+#### c) Apply gaussian blur to improve the quality of canny function.
 The filtered lines are not very sharp, so before the canny edge detection the gaussian blur was applied to provide clear edges.
 
 ```python
@@ -119,7 +119,7 @@ def gaussian_blur(img, kernel_size):
 ```
 ![Image2]
 
-####d) Apply the canny edge detection algorithm.
+#### d) Apply the canny edge detection algorithm.
 
 ```python
 low_threshold = 20
@@ -134,7 +134,7 @@ def canny(img, low_threshold, high_threshold):
   return cv2.Canny(img, low_threshold, high_threshold)
 ```
 ![Image3]
-####e) Finally, draw the lines on the image using ```HoughLinesP()``` function
+#### e) Finally, draw the lines on the image using ```HoughLinesP()``` function
 
 ```python
 rho = 1
@@ -165,7 +165,7 @@ def hough_lines(img, rho, theta, threshold, min_line_len, max_line_gap):
 
 **In order to draw a single line on the left and right lanes, I modified the draw_lines() function.**
 
-####i) Separate the left and right lane lines that the  ```HoughLinesP()``` returned
+#### i) Separate the left and right lane lines that the  ```HoughLinesP()``` returned
 Vertical lines and lines with high slope were ignored.
 
 ```python
@@ -196,14 +196,15 @@ def draw_lines(img, lines, color=[255, 0, 0], thickness=2):
             right_line[1] += [y1, y2]
 ```
 
-Then, ```np.polyfit``` was used to get line of best fit for each of the lanes
+#### ii) Then, ```np.polyfit``` was used to get line of best fit for each of the lanes
 
 ```python
 	# find line of best fit unsing numpy function polyfit
 	left_fit = np.polyfit(left_line[1], left_line[0], 1)
 	right_fit = np.polyfit(right_line[1], right_line[0], 1)
 ```
-Using these lines the algorithm works very well even in the challenge video, however, the lines would move around the lanes very violently. To fix that I found the average of last five frames.
+Using these lines the algorithm works very well even in the challenge video, however, the lines would move around the lanes very violently. 
+#### iii) To fix that I found the average of last five frames.
 
 The global variables used for line averaging
 
